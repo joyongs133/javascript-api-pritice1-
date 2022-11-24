@@ -1,38 +1,23 @@
 const getMovies = movieName => {
-   return new Promise((resolve, reject) => {
+   return new Promise(resolve => {
       fetch(`https://www.omdbapi.com/?apikey=7035c60c&s=${movieName}`)
-      .then(res => res.json())
-      .then(json => {
-         console.log(json)
-         if (json.Response === 'False') {
-            reject(json.Error)
-         }
-         resolve(json)
-      })
-      .catch(error => {
-         reject(error)
-      })
+        .then(res => res.json())
+        .then(res => resolve(res))
    })
 }
 
-let loading = true
+const titles = ['frozen', 'avengers', 'avatar']
 
-getMovies('avengers')
-  .then(movies => console.log('영화 목록:', movies))
-  .catch(error => console.log('에러 발생:', error))
-  .finally(() => loading = false)
+//titles.forEach(async title => {
+//   const movies = await getMovies(title)
+//   console.log(title, movies)
+//})
 
-  //async/ await
+const wrap = async () => {
+    for(const title of titles) {
+   const movies = await getMovies(title)
+   console.log(title, movies)
+}
+}
 
-  const wrap = async () => {
-  try {
-   const movies = await getMovies('avengers')
-   console.log('영화 목록:', movies)
-  } catch (error) {
-   console.log('에러 발생:', error)
-  } finally {
-   loading = false
-  }
-  }
-
-  wrap()
+wrap()
